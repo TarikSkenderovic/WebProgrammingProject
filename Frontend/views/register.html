@@ -1,0 +1,31 @@
+<div class="container py-5">
+    <div class="form-container">
+        <h2 class="mb-4">Create Your Account</h2>
+        <form id="registerForm">
+            <div class="mb-3">
+                <label for="registerUsername" class="form-label">Username</label>
+                <input type="text" class="form-control" id="registerUsername" required>
+            </div>
+            <div class="mb-3">
+                <label for="registerEmail" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="registerEmail" required>
+            </div>
+            <div class="mb-3">
+                <label for="registerPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="registerPassword" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirmPassword" required>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="termsAccepted" required>
+                <label class="form-check-label" for="termsAccepted">I agree to the <a href="#terms" data-route="terms">Terms and Conditions</a></label>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Register</button>
+        </form>
+        <p class="text-center mt-3">
+            Already have an account? <a href="#login" data-route="login">Login here</a>
+        </p>
+    </div>
+</div>
