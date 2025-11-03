@@ -17,6 +17,7 @@ $(document).ready(function() {
   app.route({ view: 'profile',       load: 'profile.html' });
   app.route({ view: 'login',         load: 'login.html' });
   app.route({ view: 'register',      load: 'register.html' });
+  app.route({ view: 'admin',         load: 'admin.html' });
 
   app.run();
 
