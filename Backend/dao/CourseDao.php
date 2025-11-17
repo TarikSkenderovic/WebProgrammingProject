@@ -38,6 +38,13 @@ class CourseDao extends BaseDao {
     }
 
     /**
+     * READ course by title - for validation
+     */
+    public function get_course_by_title($title) {
+        return $this->query_unique("SELECT * FROM courses WHERE title = :title", [':title' => $title]);
+    }
+
+    /**
      * UPDATE course
      */
     public function update_course($course) {

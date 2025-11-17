@@ -43,6 +43,17 @@ class InstructorDao extends BaseDao {
     }
 
     /**
+     * READ instructor by their own primary ID
+     */
+     public function get_instructor_by_id($instructor_id) {
+        $query = "SELECT i.*, u.first_name, u.last_name, u.email
+                  FROM instructors i
+                  JOIN users u ON i.user_id = u.id
+                  WHERE i.id = :id";
+        return $this.query_unique($query, [':id' => $instructor_id]);
+    }
+
+    /**
      * UPDATE instructor profile
      */
     public function update_instructor($instructor) {

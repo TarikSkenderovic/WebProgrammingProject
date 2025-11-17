@@ -43,6 +43,13 @@ class EnrollmentDao extends BaseDao {
         return $this->query($query, [':course_id' => $course_id]);
     }
 
+     /**
+     * READ a single enrollment by its primary ID.
+     */
+     public function get_enrollment_by_id($enrollment_id) {
+        return $this->query_unique("SELECT * FROM enrollments WHERE id = :id", [':id' => $enrollment_id]);
+    }
+
     /**
      * UPDATE enrollment 
      */
