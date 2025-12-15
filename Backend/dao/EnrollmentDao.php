@@ -32,6 +32,12 @@ class EnrollmentDao extends BaseDao {
         return $this->query($query, [':user_id' => $user_id]);
     }
     
+    public function count_all_enrollments() {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) FROM enrollments");
+        $stmt->execute();
+        return ["count" => $stmt->fetchColumn()];
+    }
+    
     /**
      * READ for a specific course
      */
@@ -68,6 +74,16 @@ class EnrollmentDao extends BaseDao {
      */
     public function delete_enrollment($enrollment_id) {
         $this->execute("DELETE FROM enrollments WHERE id = :id", [':id' => $enrollment_id]);
+    }
+    
+        /**
+     * READ a single enrollment by user ID and course ID for validation.
+     */
+    public function get_enrollment_by_user_and_course($user_id, $course_id) {
+        return $this->query_unique("SELECT * FROM enrollments WHERE user_id = :user_id AND course_id = :course_id", [
+            ':user_id' => $user_id,
+            ':course_id' => $course_id
+        ]);
     }
 }
 ?>

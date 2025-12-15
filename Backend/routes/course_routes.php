@@ -5,6 +5,7 @@
  *      path="/courses",
  *      tags={"courses"},
  *      summary="Get all courses",
+ *      security={{"ApiKey": {}}},
  *      @OA\Response(
  *          response=200,
  *          description="A list of all courses."
@@ -12,13 +13,21 @@
  * )
  */
 Flight::route('GET /courses', function(){
-    // First, let's update the main index.php to register the CourseService.
-    // Go to backend/public/index.php and add:
-    // require_once __DIR__ . '/../services/CourseService.php';
-    // Flight::register('courseService', 'CourseService');
-    
     $courses = Flight::courseService()->get_all_courses();
     Flight::json($courses);
+});
+
+/**
+ * @OA\Get(
+ *      path="/courses/count",
+ *      tags={"courses"},
+ *      summary="Count all courses",
+ *      security={{"ApiKey": {}}},
+ *      @OA\Response(response=200, description="Total number of courses")
+ * )
+ */
+Flight::route('GET /courses/count', function(){
+    Flight::json(Flight::courseService()->count_all_courses());
 });
 
 /**
@@ -26,6 +35,7 @@ Flight::route('GET /courses', function(){
  *      path="/courses/{id}",
  *      tags={"courses"},
  *      summary="Get a course by ID",
+ *      security={{"ApiKey": {}}},
  *      @OA\Parameter(
  *          name="id",
  *          in="path",
@@ -47,7 +57,7 @@ Flight::route('GET /courses/@id', function($id){
         $course = Flight::courseService()->get_course_by_id($id);
         Flight::json($course);
     } catch (Exception $e) {
-        Flight::json(['error' => $e->getMessage()], $e->getCode() ? $e->getCode() : 500);
+        Flight::halt($e->getCode() ?: 404, $e->getMessage());
     }
 });
 
@@ -56,6 +66,7 @@ Flight::route('GET /courses/@id', function($id){
  *      path="/courses",
  *      tags={"courses"},
  *      summary="Add a new course",
+ *      security={{"ApiKey": {}}},
  *      @OA\RequestBody(
  *          description="Course object to be added",
  *          required=true,
@@ -80,7 +91,7 @@ Flight::route('POST /courses', function(){
         $new_course_id = Flight::courseService()->add_course($data);
         Flight::json(['message' => 'Course added successfully', 'course_id' => $new_course_id]);
     } catch (Exception $e) {
-        Flight::json(['error' => $e->getMessage()], $e->getCode() ? $e->getCode() : 500);
+        Flight::halt($e->getCode() ?: 500, $e->getMessage());
     }
 });
 
@@ -89,6 +100,7 @@ Flight::route('POST /courses', function(){
  *      path="/courses/{id}",
  *      tags={"courses"},
  *      summary="Update an existing course",
+ *      security={{"ApiKey": {}}},
  *      @OA\Parameter(
  *          name="id",
  *          in="path",
@@ -117,7 +129,7 @@ Flight::route('PUT /courses/@id', function($id){
         $updated_course = Flight::courseService()->update_course($id, $data);
         Flight::json($updated_course);
     } catch (Exception $e) {
-        Flight::json(['error' => $e->getMessage()], $e->getCode() ? $e->getCode() : 500);
+        Flight::halt($e->getCode() ?: 500, $e->getMessage());
     }
 });
 
@@ -126,6 +138,7 @@ Flight::route('PUT /courses/@id', function($id){
  *      path="/courses/{id}",
  *      tags={"courses"},
  *      summary="Delete a course",
+ *      security={{"ApiKey": {}}},
  *      @OA\Parameter(
  *          name="id",
  *          in="path",
@@ -143,7 +156,7 @@ Flight::route('DELETE /courses/@id', function($id){
         Flight::courseService()->delete_course($id);
         Flight::json(['message' => 'Course deleted successfully']);
     } catch (Exception $e) {
-        Flight::json(['error' => $e->getMessage()], $e->getCode() ? $e->getCode() : 500);
+        Flight::halt($e->getCode() ?: 500, $e->getMessage());
     }
 });
 

@@ -39,19 +39,24 @@ class UserDao extends BaseDao {
 
 
       /**
-     * READ user by email - for validation
+     * READ user by email 
      */
     public function get_user_by_email($email) {
         return $this->query_unique("SELECT * FROM users WHERE email = :email", [':email' => $email]);
     }
 
     /**
-     * READ user by username - for validation
+     * READ user by username 
      */
     public function get_user_by_username($username) {
         return $this->query_unique("SELECT * FROM users WHERE username = :username", [':username' => $username]);
     }
 
+    public function count_all_users() {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS count FROM users");
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     /**
      * UPDATE user
@@ -61,14 +66,17 @@ class UserDao extends BaseDao {
                     username = :username, 
                     email = :email, 
                     first_name = :first_name, 
-                    last_name = :last_name
+                    last_name = :last_name,
+                    role = :role 
                   WHERE id = :id";
+                  
         $this->execute($query, [
             ':id' => $user['id'],
             ':username' => $user['username'],
             ':email' => $user['email'],
             ':first_name' => $user['first_name'],
-            ':last_name' => $user['last_name']
+            ':last_name' => $user['last_name'],
+            ':role' => $user['role']
         ]);
     }
 
@@ -80,3 +88,4 @@ class UserDao extends BaseDao {
     }
 }
 ?>
+
