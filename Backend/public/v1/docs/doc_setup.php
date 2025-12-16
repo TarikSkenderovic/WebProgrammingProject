@@ -14,11 +14,10 @@
 
 /**
  * @OA\Server(
- *      url="http://localhost/TarikSkenderovic\WebProgrammingProject\Backend",
- *      description="API server"
+ *      url="http://localhost/TarikSkenderovic/WebProgrammingProject/Backend",
+ *      description="API Server"
  * )
 */
-
 
 
 /**

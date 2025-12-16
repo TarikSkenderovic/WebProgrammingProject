@@ -1,11 +1,24 @@
 <?php
 
+/**
+ * @OA\Get(
+ *      path="/users/count",
+ *      tags={"users"},
+ *      summary="Count all users",
+ *      security={{"ApiKey": {}}},
+ *      @OA\Response(response=200, description="Total number of users")
+ * )
+ */
+Flight::route('GET /users/count', function(){
+    Flight::json(Flight::userService()->count_all_users());
+});
 
 /**
  * @OA\Get(
  *      path="/users",
  *      tags={"users"},
- *      summary="Get all users",
+ *      summary="Get all users. Admin access required.",
+ *      security={{"ApiKey": {}}},
  *      @OA\Response(
  *          response=200,
  *          description="A list of all users."
@@ -13,7 +26,6 @@
  * )
  */
 Flight::route('GET /users', function(){
-    // Use the registered userService to call its method
     $users = Flight::userService()->get_all_users();
     Flight::json($users);
 });
@@ -22,7 +34,8 @@ Flight::route('GET /users', function(){
  * @OA\Get(
  *      path="/users/{id}",
  *      tags={"users"},
- *      summary="Get a user by ID",
+ *      summary="Get a user by ID. Admin access required.",
+ *      security={{"ApiKey": {}}},
  *      @OA\Parameter(
  *          name="id",
  *          in="path",
@@ -44,7 +57,7 @@ Flight::route('GET /users/@id', function($id){
  * @OA\Post(
  *      path="/users",
  *      tags={"users"},
- *      summary="Add a new user",
+ *      summary="Add a new user (Register). This is a public route.",
  *      @OA\RequestBody(
  *          description="User object that needs to be added",
  *          required=true,
@@ -60,27 +73,16 @@ Flight::route('GET /users/@id', function($id){
  *      @OA\Response(
  *          response=200,
  *          description="The ID of the newly created user."
- *      ),
- *      @OA\Response(
- *          response=400,
- *          description="Bad Request - Missing required fields."
- *      ),
- *       @OA\Response(
- *          response=409,
- *          description="Conflict - Username or email already exists."
  *      )
  * )
  */
 Flight::route('POST /users', function(){
-    // Get the request body
     $data = Flight::request()->data->getData();
-    
     try {
         $new_user_id = Flight::userService()->add_user($data);
         Flight::json(['message' => 'User added successfully', 'user_id' => $new_user_id]);
     } catch (Exception $e) {
-        // Handle exceptions from the service layer (like validation errors)
-        Flight::json(['error' => $e->getMessage()], $e->getCode() ? $e->getCode() : 500);
+        Flight::halt($e->getCode() ?: 500, $e->getMessage());
     }
 });
 
@@ -88,7 +90,8 @@ Flight::route('POST /users', function(){
  * @OA\Put(
  *      path="/users/{id}",
  *      tags={"users"},
- *      summary="Update an existing user",
+ *      summary="Update an existing user. Admin access required.",
+ *      security={{"ApiKey": {}}},
  *      @OA\Parameter(
  *          name="id",
  *          in="path",
@@ -121,7 +124,8 @@ Flight::route('PUT /users/@id', function($id){
  * @OA\Delete(
  *      path="/users/{id}",
  *      tags={"users"},
- *      summary="Delete a user",
+ *      summary="Delete a user. Admin access required.",
+ *      security={{"ApiKey": {}}},
  *      @OA\Parameter(
  *          name="id",
  *          in="path",

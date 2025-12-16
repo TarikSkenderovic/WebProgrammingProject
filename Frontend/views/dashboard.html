@@ -1,119 +1,46 @@
-<div class="hero-section text-white text-center">
-    <div class="container">
-        <h1 class="display-4">Welcome Back, User!</h1>
-        <p class="lead">Your learning journey continues here. Let's achieve your goals together.</p>
-    </div>
-</div>
-
 <div class="container py-5">
+    <div class="hero-section text-center mb-5">
+        <h1 class="display-4">Welcome Back, User!</h1>
+        <p class="lead">Continue your learning journey and explore new courses.</p>
+        <a href="#courses" class="btn btn-primary btn-lg">Browse Courses</a>
+    </div>
 
-    
-    <div class="row text-center mb-5">
-        <div class="col-md-4">
-            <div class="card p-3 shadow-sm">
-                <div class="card-body">
-                    <i class="bi bi-laptop h1 text-primary"></i>
-                    <h2 class="display-4 fw-bold my-2">3</h2>
-                    <p class="text-muted mb-0">Courses in Progress</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card p-3 shadow-sm">
-                <div class="card-body">
-                    <i class="bi bi-patch-check-fill h1 text-success"></i>
-                    <h2 class="display-4 fw-bold my-2">1</h2>
-                    <p class="text-muted mb-0">Completed Courses</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card p-3 shadow-sm">
-                <div class="card-body">
-                    <i class="bi bi-clock-history h1 text-info"></i>
-                    <h2 class="display-4 fw-bold my-2">12</h2>
-                    <p class="text-muted mb-0">Hours Learned</p>
+
+    <div id="enrolled-courses-section" style="display: none;">
+        <h2 class="mb-4">Your Enrolled Courses</h2>
+        <div class="row" id="enrolled-courses-container">
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
         </div>
     </div>
 
-    
-    <h2 class="mb-4">Your Enrolled Courses</h2>
-    <div class="row">
-        
-        <div class="col-md-4">
-            <div class="card shadow-sm course-card">
-                <img src="assets/static/images/WebDevelopment.jpg" class="card-img-top" alt="Web Development Course">
-                <div class="card-body">
-                    <h5 class="card-title">Complete Web Development Bootcamp</h5>
-                    
-                    <div class="progress my-3" style="height: 10px;">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <p class="small text-muted mb-3">75% Complete</p>
-                    <a href="#course-detail" class="btn btn-primary w-100">Continue Learning</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card shadow-sm course-card">
-                <img src="assets/static/images/python.jpg" class="card-img-top" alt="Data Science Course">
-                <div class="card-body">
-                    <h5 class="card-title">Python for Data Science</h5>
-                 
-                    <div class="progress my-3" style="height: 10px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <p class="small text-muted mb-3">40% Complete</p>
-                    <a href="#course-detail" class="btn btn-primary w-100">Continue Learning</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card shadow-sm course-card">
-                <img src="assets/static/images/UX.jpg" class="card-img-top" alt="UX Design Course">
-                <div class="card-body">
-                    <h5 class="card-title">Ultimate UX/UI Design</h5>
-                    
-                    <div class="progress my-3" style="height: 10px;">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 10%;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <p class="small text-muted mb-3">10% Complete</p>
-                    <a href="#course-detail" class="btn btn-primary w-100">Continue Learning</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
-<h2 class="mt-5 mb-4">Recommended for You</h2>
+    <h2 class="mt-5 mb-4">Recommended for You</h2>
     <div class="row">
-       
+        
         <div class="col-md-6">
-            
-            <div class="card flex-row mb-3 shadow-sm recommendation-card">
-                <img src="assets/static/images/react.jpg" class="card-img-left" alt="React Course">
+            <div class="card flex-row mb-3">
+                <img src="https://via.placeholder.com/150x100/dc3545/ffffff?text=React" class="card-img-left" alt="React Course">
                 <div class="card-body">
                     <h5 class="card-title">React - The Complete Guide</h5>
                     <p class="card-text small">Build powerful, reactive frontend applications with React.js.</p>
-                    
-                    <a href="#course-detail" class="btn btn-sm btn-info">View Details</a>
+                    <a href="#course-detail/1" class="btn btn-sm btn-info">View Details</a>
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-6">
-            
-            <div class="card flex-row mb-3 shadow-sm recommendation-card">
-                <img src="assets/static/images/SQL-Database.png" class="card-img-left" alt="SQL Course">
+            <div class="card flex-row mb-3">
+                <img src="https://via.placeholder.com/150x100/17a2b8/ffffff?text=SQL" class="card-img-left" alt="SQL Course">
                 <div class="card-body">
                     <h5 class="card-title">SQL for Data Analysis</h5>
                     <p class="card-text small">Learn essential SQL for database management and data querying.</p>
-                    
-                    <a href="#course-detail" class="btn btn-sm btn-info">View Details</a>
+                    <a href="#course-detail/2" class="btn btn-sm btn-info">View Details</a>
                 </div>
             </div>
         </div>
     </div>
+</div>
