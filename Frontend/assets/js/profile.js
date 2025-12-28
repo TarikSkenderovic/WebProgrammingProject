@@ -1,15 +1,18 @@
+
 const ProfileActions = {
-    
+    // This function will be called when the profile page loads.
     loadProfile: function() {
         const user = AuthService.getUser(); 
         if (!user) {
-            alert("You must be logged in to view your profile.");
+            toastr.warning("You must be logged in to view your profile.");
             window.location.hash = "#login";
             return;
         }
 
+        // We have the user's ID, now fetch their full, up-to-date data from the API
         UserService.getById(user.id, 
             (fullUserData) => {
+                
                 $("#profileFirstName").val(fullUserData.first_name);
                 $("#profileLastName").val(fullUserData.last_name);
                 $("#profileUsername").val(fullUserData.username);
@@ -21,12 +24,12 @@ const ProfileActions = {
             },
             (error) => {
                 console.error("Failed to fetch profile data:", error);
-                alert("Could not load your profile data.");
+                toastr.error("Could not load your profile data.");
             }
         );
     },
 
-    
+    // This function will handle the "Save Changes" button click.
     handleProfileUpdate: function(e) {
         e.preventDefault(); 
         const user = AuthService.getUser();
@@ -44,11 +47,11 @@ const ProfileActions = {
         // Call the API to update the user
         UserService.updateUser(user.id, updatedData,
             (response) => {
-                alert("Profile updated successfully!");
+                toastr.success("Profile updated successfully!");
                 $("#profile-name-display").text(response.first_name + ' ' + response.last_name);
             },
             (error) => {
-                alert("Profile update failed: " + (error.error || "Unknown error."));
+                toastr.error("Profile update failed: " + (error.error || "Unknown error."));
             }
         );
     },
@@ -64,7 +67,7 @@ const ProfileActions = {
         const confirmNewPassword = $("#confirmNewPassword").val();
 
         if (newPassword !== confirmNewPassword) {
-            alert("New passwords do not match.");
+            toastr.error("New passwords do not match.");
             return;
         }
 
@@ -76,12 +79,12 @@ const ProfileActions = {
 
         UserService.changePassword(data,
             (response) => {
-                alert("Password changed successfully! Please log in again for security.");
+                toastr.success("Password changed successfully! Please log in again for security.");
                 bootstrap.Modal.getInstance(document.getElementById('changePasswordModal')).hide();
                 AuthService.logout(); 
             },
             (error) => {
-                alert("Failed to change password: " + (error.error || "Unknown error."));
+                toastr.error("Failed to change password: " + (error.error || "Unknown error."));
             }
         );
     },
@@ -96,9 +99,14 @@ const ProfileActions = {
     
     handleDeleteAccount: function() {
         const userId = $("#confirmDeleteBtn").data("entityId");
-        UserService.deleteUser(userId, () => {
-            alert("Your account has been permanently deleted.");
-            AuthService.logout(); 
-        }, (error) => { /* ... */ });
+        UserService.deleteUser(userId, 
+            () => {
+                toastr.info("Your account has been permanently deleted.");
+                AuthService.logout(); 
+            }, 
+            (error) => {
+                toastr.error("Delete failed: " + (error.error || "Unknown error."));
+            }
+        );
     }
 };

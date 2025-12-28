@@ -6,6 +6,8 @@ With this plugin you will load a main page wrapper that will load every other vi
 ----------
 
 
+URL ONLINE WEB:https://onlinecourseplatform.xo.je/#dashboard
+
 HTML
 -------------
 ```html
