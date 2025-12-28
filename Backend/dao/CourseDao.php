@@ -25,12 +25,40 @@ class CourseDao extends BaseDao {
     }
 
 
-    public function get_all_courses() {
-        $query = "SELECT c.*, CONCAT(u.first_name, ' ', u.last_name) AS instructor_name 
-                  FROM courses c
-                  LEFT JOIN instructors i ON c.instructor_id = i.id
-                  LEFT JOIN users u ON i.user_id = u.id";
-        return $this->query($query, []);
+    /**
+     * READ all courses - UPDATED to handle search and filtering
+     * @param string|null $search Search term for the course title.
+     * @param string|null $level Difficulty level to filter by.
+     */
+    public function get_all_courses($search = null, $level = null) {
+        // Start with the base query that already joins the tables
+        $base_query = "SELECT c.*, CONCAT(u.first_name, ' ', u.last_name) AS instructor_name 
+                       FROM courses c
+                       LEFT JOIN instructors i ON c.instructor_id = i.id
+                       LEFT JOIN users u ON i.user_id = u.id";
+
+        $params = [];
+        $where_clauses = [];
+
+        // Dynamically add a WHERE clause for the search term
+        if (isset($search) && $search != '') {
+            $where_clauses[] = "c.title LIKE :search";
+            $params[':search'] = '%' . $search . '%';
+        }
+
+        // Dynamically add a WHERE clause for the difficulty level
+        if (isset($level) && $level != '') {
+            $where_clauses[] = "c.difficulty_level = :level";
+            $params[':level'] = $level;
+        }
+
+        // If there are any WHERE clauses, assemble them into the final query
+        if (!empty($where_clauses)) {
+            $base_query .= " WHERE " . implode(" AND ", $where_clauses);
+        }
+
+        // Execute the final query using the generic 'query' method from BaseDao
+        return $this->query($base_query, $params);
     }
 
 
@@ -57,14 +85,17 @@ class CourseDao extends BaseDao {
         $query = "UPDATE courses SET 
                     title = :title, 
                     description = :description, 
+                    instructor_id = :instructor_id,
                     price = :price, 
                     difficulty_level = :difficulty_level,
                     image_url = :image_url
                   WHERE id = :id";
+                  
         $this->execute($query, [
             ':id' => $course['id'],
             ':title' => $course['title'],
             ':description' => $course['description'],
+            ':instructor_id' => $course['instructor_id'], // Add the new parameter
             ':price' => $course['price'],
             ':difficulty_level' => $course['difficulty_level'],
             ':image_url' => $course['image_url'] ?? null

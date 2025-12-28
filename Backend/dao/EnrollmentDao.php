@@ -25,17 +25,18 @@ class EnrollmentDao extends BaseDao {
      * READ all enrollments for a specific user
      */
     public function get_enrollments_by_user_id($user_id) {
-        $query = "SELECT e.*, c.title AS course_title
+        $query = "SELECT 
+                    e.id, 
+                    e.user_id, 
+                    e.course_id, 
+                    e.enrollment_date, 
+                    e.progress,
+                    c.title AS course_title,
+                    c.image_url
                   FROM enrollments e
                   JOIN courses c ON e.course_id = c.id
                   WHERE e.user_id = :user_id";
         return $this->query($query, [':user_id' => $user_id]);
-    }
-    
-    public function count_all_enrollments() {
-        $stmt = $this->conn->prepare("SELECT COUNT(*) FROM enrollments");
-        $stmt->execute();
-        return ["count" => $stmt->fetchColumn()];
     }
     
     /**
@@ -84,6 +85,27 @@ class EnrollmentDao extends BaseDao {
             ':user_id' => $user_id,
             ':course_id' => $course_id
         ]);
+    }
+
+    /**
+     * READ all enrollments in the system (for Admin).
+     */
+    public function get_all_enrollments() {
+        $query = "SELECT 
+                    e.id, e.user_id, e.course_id, e.enrollment_date, e.progress,
+                    c.title AS course_title,
+                    CONCAT(u.first_name, ' ', u.last_name) AS student_name
+                  FROM enrollments e
+                  JOIN courses c ON e.course_id = c.id
+                  JOIN users u ON e.user_id = u.id
+                  ORDER BY e.enrollment_date DESC";
+        return $this->query($query, []);
+    }
+    
+    public function count_all_enrollments() {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS count FROM enrollments");
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
 ?>

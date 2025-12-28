@@ -1,6 +1,39 @@
 <?php
 
 /**
+ * @OA\Get(
+ *      path="/enrollments",
+ *      tags={"enrollments"},
+ *      summary="Get all enrollments in the system (Admin only)",
+ *      security={{"ApiKey": {}}},
+ *      @OA\Response(
+ *          response=200,
+ *          description="A list of all enrollments."
+ *      )
+ * )
+ */
+Flight::route('GET /enrollments', function(){
+    Flight::json(Flight::enrollmentService()->get_all_enrollments());
+});
+
+/**
+ * @OA\Get(
+ *      path="/enrollments/count",
+ *      tags={"enrollments"},
+ *      summary="Count all enrollments in the system (Admin only)",
+ *      security={{"ApiKey": {}}},
+ *      @OA\Response(
+ *          response=200,
+ *          description="Total number of enrollments."
+ *      )
+ * )
+ */
+Flight::route('GET /enrollments/count', function(){
+    // This route is protected by the middleware, which checks for admin role.
+    Flight::json(Flight::enrollmentService()->count_all_enrollments());
+});
+
+/**
  * @OA\Post(path="/enrollments", tags={"enrollments"}, summary="Enroll a user in a course", security={{"ApiKey": {}}},
  *     @OA\RequestBody(required=true, @OA\JsonContent(required={"user_id", "course_id"}, @OA\Property(property="user_id", type="integer"), @OA\Property(property="course_id", type="integer"))),
  *     @OA\Response(response=200, description="Enrollment successful.")

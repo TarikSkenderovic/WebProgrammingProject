@@ -35,8 +35,11 @@ class CourseService extends BaseService {
         return $this->dao->add_course($course_data);
     }
 
-    public function get_all_courses() {
-        return $this->dao->get_all_courses();
+    /**
+     * Get all courses, now with filtering capabilities.
+     */
+    public function get_all_courses($search = null, $level = null) {
+        return $this->dao->get_all_courses($search, $level);
     }
 
     public function get_course_by_id($course_id) {

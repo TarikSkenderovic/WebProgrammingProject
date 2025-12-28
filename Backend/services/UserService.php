@@ -1,16 +1,12 @@
 <?php
-
-
 require_once __DIR__.'/BaseService.php';
 require_once __DIR__.'/../dao/UserDao.php';
 
-// This service is for User Management (CRUD)
 class UserService extends BaseService {
 
     public function __construct() {
         parent::__construct(new UserDao());
     }
-
 
     public function add_user($user_data) {
         if (empty($user_data['username']) || empty($user_data['email']) || empty($user_data['password'])) {
@@ -22,6 +18,8 @@ class UserService extends BaseService {
         if ($this->dao->get_user_by_email($user_data['email'])) {
             throw new Exception("Email already exists.", 409);
         }
+        
+        
         $user_to_add = [
             'username' => $user_data['username'],
             'email' => $user_data['email'],
@@ -32,28 +30,26 @@ class UserService extends BaseService {
         return $this->dao->add_user($user_to_add);
     }
     
-
-
-    public function get_all_users() {
-        return $this->dao->get_all_users();
+    public function change_password($user_data) {
+        if (empty($user_data['user_id']) || empty($user_data['current_password']) || empty($user_data['new_password'])) {
+            throw new Exception("All password fields are required.", 400);
+        }
+        $user_from_db = $this->dao->get_user_by_id($user_data['user_id']);
+        if (!$user_from_db) {
+            throw new Exception("User not found.", 404);
+        }
+        if (!password_verify($user_data['current_password'], $user_from_db['password_hash'])) {
+            throw new Exception("The current password you entered is incorrect.", 401);
+        }
+        $new_password_hash = password_hash($user_data['new_password'], PASSWORD_BCRYPT);
+        $this->dao->change_password($user_data['user_id'], $new_password_hash);
+        return ['message' => 'Password changed successfully.'];
     }
-
-    public function get_user_by_id($user_id) {
-        return $this->dao->get_user_by_id($user_id);
-    }
-
-    public function update_user($user_id, $user_data) {
-        $user_data['id'] = $user_id;
-        $this->dao->update_user($user_data);
-        return $this->get_user_by_id($user_id);
-    }
-
-    public function delete_user($user_id) {
-        $this->dao->delete_user($user_id);
-    }
-
-    public function count_all_users() {
-        return $this->dao->count_all_users();
-    }
+    
+    public function get_all_users() { return $this->dao->get_all_users(); }
+    public function get_user_by_id($user_id) { return $this->dao->get_user_by_id($user_id); }
+    public function update_user($user_id, $user_data) { $user_data['id'] = $user_id; $this->dao->update_user($user_data); return $this->get_user_by_id($user_id); }
+    public function delete_user($user_id) { $this->dao->delete_user($user_id); }
+    public function count_all_users() { return $this->dao->count_all_users(); }
 }
 ?>

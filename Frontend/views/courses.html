@@ -2,30 +2,30 @@
     <h1 class="mb-4 text-center">Explore Our Courses</h1>
 
     <!-- Search and Filter Section -->
-    <div class="row mb-4">
-        <div class="col-md-8 offset-md-2">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for courses..." aria-label="Search courses">
-                <button class="btn btn-primary" type="button">Search</button>
-            </div>
-            <div class="d-flex justify-content-center mt-3 flex-wrap">
-                <select class="form-select me-2 mb-2" style="width: auto;">
-                    <option selected>All Categories</option>
-                    <option value="1">Web Development</option>
-                    <option value="2">Data Science</option>
-                    <option value="3">Design</option>
-                    <option value="4">Marketing</option>
-                </select>
-                <select class="form-select me-2 mb-2" style="width: auto;">
-                    <option selected>All Levels</option>
-                    <option value="1">Beginner</option>
-                    <option value="2">Intermediate</option>
-                    <option value="3">Advanced</option>
-                </select>
-                <button class="btn btn-outline-secondary mb-2">Apply Filters</button>
-            </div>
+<div class="row mb-4">
+    <div class="col-md-8 offset-md-2">
+        <div class="input-group">
+            <input type="text" class="form-control" id="search-input" placeholder="Search for courses..." aria-label="Search courses">
+            <button class="btn btn-primary" type="button" id="search-btn">Search</button>
+        </div>
+        <div class="d-flex justify-content-center mt-3 flex-wrap">
+            <select class="form-select me-2 mb-2" style="width: auto;" id="category-select">
+                <option value="" selected>All Categories</option>
+                <option value="1">Web Development</option>
+                <option value="2">Data Science</option>
+                <option value="3">Design</option>
+                <option value="4">Marketing</option>
+            </select>
+            <select class="form-select me-2 mb-2" style="width: auto;" id="level-select">
+                <option value="" selected>All Levels</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+            
         </div>
     </div>
+</div>
 
 
     <div class="row" id="course-list-container">
