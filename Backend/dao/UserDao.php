@@ -57,6 +57,14 @@ class UserDao extends BaseDao {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
+    public function change_password($user_id, $new_password_hash) {
+        $query = "UPDATE users SET password_hash = :password_hash WHERE id = :id";
+        $this->execute($query, [
+            ':id' => $user_id,
+            ':password_hash' => $new_password_hash
+        ]);
+    }
 
     /**
      * UPDATE user
@@ -86,6 +94,8 @@ class UserDao extends BaseDao {
     public function delete_user($user_id) {
         $this->execute("DELETE FROM users WHERE id = :id", [':id' => $user_id]);
     }
+    
+
 }
 ?>
 

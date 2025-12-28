@@ -4,16 +4,34 @@
  * @OA\Get(
  *      path="/courses",
  *      tags={"courses"},
- *      summary="Get all courses",
+ *      summary="Get all courses with optional filtering",
  *      security={{"ApiKey": {}}},
+ *      @OA\Parameter(
+ *          name="search",
+ *          in="query",
+ *          description="Search term to filter courses by title",
+ *          @OA\Schema(type="string")
+ *      ),
+ *      @OA\Parameter(
+ *          name="level",
+ *          in="query",
+ *          description="Difficulty level to filter by (e.g., 'Beginner', 'Intermediate')",
+ *          @OA\Schema(type="string")
+ *      ),
  *      @OA\Response(
  *          response=200,
- *          description="A list of all courses."
+ *          description="A list of courses."
  *      )
  * )
  */
 Flight::route('GET /courses', function(){
-    $courses = Flight::courseService()->get_all_courses();
+    // Read the optional 'search' and 'level' query parameters from the URL
+    $search = Flight::request()->query['search'];
+    $level = Flight::request()->query['level'];
+
+    // Call the service with the retrieved parameters (they will be null if not provided)
+    $courses = Flight::courseService()->get_all_courses($search, $level);
+    
     Flight::json($courses);
 });
 
@@ -91,7 +109,11 @@ Flight::route('POST /courses', function(){
         $new_course_id = Flight::courseService()->add_course($data);
         Flight::json(['message' => 'Course added successfully', 'course_id' => $new_course_id]);
     } catch (Exception $e) {
-        Flight::halt($e->getCode() ?: 500, $e->getMessage());
+        $code = $e->getCode();
+        if ($code < 100 || $code > 599) {
+            $code = 500; 
+        }
+        Flight::halt($code, $e->getMessage());
     }
 });
 

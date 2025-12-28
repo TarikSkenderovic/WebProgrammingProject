@@ -1,46 +1,39 @@
-<div class="container py-5">
+<div class="container-fluid py-5">
     <div class="hero-section text-center mb-5">
         <h1 class="display-4">Welcome Back, User!</h1>
         <p class="lead">Continue your learning journey and explore new courses.</p>
         <a href="#courses" class="btn btn-primary btn-lg">Browse Courses</a>
     </div>
 
-
     <div id="enrolled-courses-section" style="display: none;">
         <h2 class="mb-4">Your Enrolled Courses</h2>
         <div class="row" id="enrolled-courses-container">
-            <div class="text-center">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
+            <!-- Loading spinner -->
         </div>
     </div>
-
 
     <h2 class="mt-5 mb-4">Recommended for You</h2>
     <div class="row">
-        
+        <!-- Recommendation 1: MERN Stack -->
         <div class="col-md-6">
             <div class="card flex-row mb-3">
-                <img src="https://via.placeholder.com/150x100/dc3545/ffffff?text=React" class="card-img-left" alt="React Course">
+                <img src="assets/static/images/mern-stack-development-1.jpg" class="card-img-left" alt="MERN Course" style="width: 150px; object-fit: cover;">
                 <div class="card-body">
-                    <h5 class="card-title">React - The Complete Guide</h5>
-                    <p class="card-text small">Build powerful, reactive frontend applications with React.js.</p>
-                    <a href="#course-detail/1" class="btn btn-sm btn-info">View Details</a>
+                    <h5 class="card-title">Full-Stack Web Development with MERN</h5>
+                    <p class="card-text small">Build modern web applications using MongoDB, Express, React, and Node.js.</p>
+                    <a href="#course-detail" class="btn btn-sm btn-info view-details-btn" data-course-id="9">View Details</a>
                 </div>
             </div>
         </div>
-
+        <!-- Recommendation 2: Flutter -->
         <div class="col-md-6">
             <div class="card flex-row mb-3">
-                <img src="https://via.placeholder.com/150x100/17a2b8/ffffff?text=SQL" class="card-img-left" alt="SQL Course">
+                <img src="assets/static/images/best-flutter-app-development-tools.webp" class="card-img-left" alt="Flutter Course" style="width: 150px; object-fit: cover;">
                 <div class="card-body">
-                    <h5 class="card-title">SQL for Data Analysis</h5>
-                    <p class="card-text small">Learn essential SQL for database management and data querying.</p>
-                    <a href="#course-detail/2" class="btn btn-sm btn-info">View Details</a>
+                    <h5 class="card-title">Mobile App Development with Flutter</h5>
+                    <p class="card-text small">Build cross-platform mobile apps for iOS and Android with Google's Flutter.</p>
+                    <a href="#course-detail" class="btn btn-sm btn-info view-details-btn" data-course-id="14">View Details</a>
                 </div>
             </div>
         </div>
     </div>
-</div>

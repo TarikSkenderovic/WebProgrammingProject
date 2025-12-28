@@ -10,8 +10,8 @@
  *          required=true,
  *          @OA\JsonContent(
  *              required={"email", "password"},
- *              @OA\Property(property="email", type="string", example="test@example.com", description="User's email"),
- *              @OA\Property(property="password", type="string", example="password123", description="User's password")
+ *              @OA\Property(property="email", type="string", example="muha@gmail.com", description="User's email"),
+ *              @OA\Property(property="password", type="string", example="muha123", description="User's password")
  *          )
  *      ),
  *      @OA\Response(

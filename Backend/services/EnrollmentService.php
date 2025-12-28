@@ -57,7 +57,10 @@ class EnrollmentService extends BaseService {
     }
     public function get_enrollment_by_user_and_course($user_id, $course_id) {
         return $this->dao->get_enrollment_by_user_and_course($user_id, $course_id);
-}
+    }
+    public function get_all_enrollments() {
+        return $this->dao->get_all_enrollments();
+    }
 
 }
 ?>

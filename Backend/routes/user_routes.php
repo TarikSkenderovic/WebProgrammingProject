@@ -34,7 +34,7 @@ Flight::route('GET /users', function(){
  * @OA\Get(
  *      path="/users/{id}",
  *      tags={"users"},
- *      summary="Get a user by ID. Admin access required.",
+ *      summary="Get a user by ID. Requires Admin OR ownership.",
  *      security={{"ApiKey": {}}},
  *      @OA\Parameter(
  *          name="id",
@@ -44,13 +44,22 @@ Flight::route('GET /users', function(){
  *      ),
  *      @OA\Response(
  *          response=200,
- *          description="The user data, or false if not found."
+ *          description="The user data."
  *      )
  * )
  */
 Flight::route('GET /users/@id', function($id){
+    $logged_in_user = Flight::get('user');
+    if ($logged_in_user->role != 'admin' && $logged_in_user->id != $id) {
+        Flight::halt(403, "Forbidden: You are not authorized to view this profile.");
+        return;
+    }
     $user = Flight::userService()->get_user_by_id($id);
-    Flight::json($user);
+    if ($user) {
+        Flight::json($user);
+    } else {
+        Flight::halt(404, "User not found.");
+    }
 });
 
 /**
@@ -82,7 +91,9 @@ Flight::route('POST /users', function(){
         $new_user_id = Flight::userService()->add_user($data);
         Flight::json(['message' => 'User added successfully', 'user_id' => $new_user_id]);
     } catch (Exception $e) {
-        Flight::halt($e->getCode() ?: 500, $e->getMessage());
+        $code = $e->getCode();
+        if ($code < 100 || $code > 599) { $code = 500; }
+        Flight::halt($code, $e->getMessage());
     }
 });
 
@@ -90,7 +101,7 @@ Flight::route('POST /users', function(){
  * @OA\Put(
  *      path="/users/{id}",
  *      tags={"users"},
- *      summary="Update an existing user. Admin access required.",
+ *      summary="Update an existing user. Admin or owner access required.",
  *      security={{"ApiKey": {}}},
  *      @OA\Parameter(
  *          name="id",
@@ -124,7 +135,7 @@ Flight::route('PUT /users/@id', function($id){
  * @OA\Delete(
  *      path="/users/{id}",
  *      tags={"users"},
- *      summary="Delete a user. Admin access required.",
+ *      summary="Delete a user. Requires Admin OR ownership.",
  *      security={{"ApiKey": {}}},
  *      @OA\Parameter(
  *          name="id",
@@ -139,8 +150,61 @@ Flight::route('PUT /users/@id', function($id){
  * )
  */
 Flight::route('DELETE /users/@id', function($id){
+    // Get the user who is making the request from the JWT token
+    $logged_in_user = Flight::get('user');
+
+    // AUTHORIZATION LOGIC:
+    // Allow the delete only if the user is an admin OR is deleting their own account.
+    if ($logged_in_user->role != 'admin' && $logged_in_user->id != $id) {
+        Flight::halt(403, "Forbidden: You are not authorized to delete this user.");
+        return;
+    }
+
     Flight::userService()->delete_user($id);
     Flight::json(['message' => 'User deleted successfully']);
+});
+
+/**
+ * @OA\Post(
+ *      path="/users/change-password",
+ *      tags={"users"},
+ *      summary="Change the password for the logged-in user.",
+ *      security={{"ApiKey": {}}},
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(
+ *              required={"user_id", "current_password", "new_password"},
+ *              @OA\Property(property="user_id", type="integer"),
+ *              @OA\Property(property="current_password", type="string"),
+ *              @OA\Property(property="new_password", type="string")
+ *          )
+ *      ),
+ *      @OA\Response(response=200, description="Password changed successfully."),
+ *      @OA\Response(response=401, description="Unauthorized - Current password was incorrect.")
+ * )
+ */
+Flight::route('POST /users/change-password', function(){
+    $data = Flight::request()->data->getData();
+    try {
+        $logged_in_user = Flight::get('user');
+        
+        // YOUR CORRECT FIX: Add this null check
+        if (!$logged_in_user) {
+            Flight::halt(401, "User not authenticated. Please log in again.");
+            return;
+        }
+        
+        if ($logged_in_user->id != $data['user_id']) {
+            Flight::halt(403, "Forbidden: You can only change your own password.");
+        }
+        
+        $response = Flight::userService()->change_password($data);
+        Flight::json($response);
+    } catch (Exception $e) {
+        $code = $e->getCode();
+        if ($code < 100 || $code > 599) { $code = 500; }
+        Flight::halt($code, $e->getMessage());
+    }
 });
 
 ?>
