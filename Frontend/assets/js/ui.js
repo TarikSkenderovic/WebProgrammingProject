@@ -17,7 +17,6 @@ const UI = {
                         <td>${new Date(enrollment.enrollment_date).toLocaleDateString()}</td>
                         <td>${enrollment.progress}%</td>
                         <td>
-                            <!-- THIS IS THE FIX: Added the onclick handler -->
                             <button class="btn btn-sm btn-danger" onclick="EnrollmentActions.openDeleteModal(${enrollment.id})">Remove</button>
                         </td>
                     </tr>
@@ -33,7 +32,7 @@ const UI = {
         container.empty();
         if (courses && courses.length > 0) {
             courses.forEach(course => {
-                const imageUrl = course.image_url && course.image_url.length > 0 ? `assets/static/images/${course.image_url}` : 'https://via.placeholder.com/400x200';
+                const imageUrl = course.image_url && course.image_url.length > 0 ? `frontend/assets/static/images/${course.image_url}` : 'https://via.placeholder.com/400x200';
                 const cardHtml = `<div class="col-lg-4 col-md-6 mb-4"><div class="card h-100"><img src="${imageUrl}" class="card-img-top" alt="${course.title}" style="height: 200px; object-fit: cover;"><div class="card-body d-flex flex-column"><h5 class="card-title">${course.title}</h5><p class="card-text">${course.description ? course.description.substring(0, 100) : ''}...</p><p class="card-text small text-muted mt-auto">Instructor: ${course.instructor_name || 'N/A'}</p><p class="card-text"><strong>$${course.price}</strong></p><a href="#course-detail" class="btn btn-primary mt-2 view-details-btn" data-course-id="${course.id}">View Details</a></div></div></div>`;
                 container.append(cardHtml);
             });
@@ -44,7 +43,7 @@ const UI = {
     renderCourseDetail: function(course) {
         if (course) {
             window.selectedCourseId = course.id;
-            const imageUrl = course.image_url && course.image_url.length > 0 ? `assets/static/images/${course.image_url}` : 'https://via.placeholder.com/800x400';
+            const imageUrl = course.image_url && course.image_url.length > 0 ? `frontend/assets/static/images/${course.image_url}` : 'https://via.placeholder.com/800x400';
             $("#course-detail-title").text(course.title);
             $("#course-detail-description").text(course.description);
             $("#course-detail-image").attr("src", imageUrl);
@@ -61,12 +60,12 @@ const UI = {
         container.empty();
         if (enrollments && enrollments.length > 0) {
             enrollments.forEach(enrollment => {
-                const imageUrl = enrollment.image_url && enrollment.image_url.length > 0 ? `assets/static/images/${enrollment.image_url}` : 'https://via.placeholder.com/400x200';
-                const cardHtml = `<div class="col-md-4 mb-4"><div class="card h-100"><img src="${imageUrl}" class="card-img-top" alt="Course Image" style="height: 200px; object-fit: cover;"><div class="card-body d-flex flex-column"><h5 class="card-title">${enrollment.course_title}</h5><div class="progress mt-auto mb-2" style="height: 10px;"><div class="progress-bar" role="progressbar" style="width: ${enrollment.progress}%;" aria-valuenow="${enrollment.progress}" aria-valuemin="0" aria-valuemax="100"></div></div><p class="card-text small text-muted">${enrollment.progress}% Complete</p><a href="#course-detail" class="btn btn-primary mt-2 view-details-btn" data-course-id="${enrollment.course_id}">Continue Learning</a></div></div></div>`;
+                const imageUrl = enrollment.image_url && enrollment.image_url.length > 0 ? `frontend/assets/static/images/${enrollment.image_url}` : 'https://via.placeholder.com/400x200';
+                const cardHtml = `<div class="col-md-4 mb-4"><div class="card h-100"><img src="${imageUrl}" class="card-img-top" alt="Course Image" style="height: 200px; object-fit: cover;"><div class="card-body d-flex flex-column"><h5 class="card-title">${enrollment.course_title}</h5><div class="progress mt-auto mb-2" style="height: 10px;"><div class="progress-bar" role="progressbar" style="width: ${enrollment.progress}%;" aria-valuenow="${enrollment.progress}"></div></div><p class="card-text small text-muted">${enrollment.progress}% Complete</p><a href="#course-detail" class="btn btn-primary mt-2 view-details-btn" data-course-id="${enrollment.course_id}">Continue Learning</a></div></div></div>`;
                 container.append(cardHtml);
             });
         } else {
-            container.append('<div class="col-12"><p>You are not yet enrolled in any courses. <a href="#courses">Explore courses</a> to get started!</p></div>');
+            container.append('<div class="col-12"><p>You are not yet enrolled in any courses. <a href="#courses">Explore courses</a></p></div>');
         }
     },
     renderReviews: function(reviews) {

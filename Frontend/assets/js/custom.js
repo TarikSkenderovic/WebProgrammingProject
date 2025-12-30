@@ -2,7 +2,25 @@
 $(document).ready(function() {
     $("main#spapp > section").height($(document).height() - 60);
 
-    var app = $.spapp({ defaultView: "#dashboard", templateDir: "./views/", pageNotFound: "error_404" });
+    var app = $.spapp({ defaultView: "#dashboard", templateDir: "./frontend/views/", pageNotFound: "error_404" });
+    
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
 
     // --- GLOBAL EVENT HANDLERS ---
     $(document).on('click', '.view-details-btn', function(e) { window.selectedCourseId = $(this).data('course-id'); });
@@ -11,7 +29,7 @@ $(document).ready(function() {
         if (entityType === 'user') { UserActions.handleDelete(); } 
         else if (entityType === 'course') { CourseActions.handleDelete(); } 
         else if (entityType === 'instructor') { InstructorActions.handleDelete(); } 
-        else if (entityType === 'enrollment') { EnrollmentActions.handleDelete(); } // ADDED
+        else if (entityType === 'enrollment') { EnrollmentActions.handleDelete(); } 
         else if (entityType === 'self-delete') { ProfileActions.handleDeleteAccount(); }
     });
     $("#nav-logout-btn").on("click", (e) => { e.preventDefault(); AuthService.logout(); });

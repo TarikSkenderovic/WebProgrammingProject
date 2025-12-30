@@ -1,3 +1,6 @@
+// This file handles all authentication logic (login, logout, token)
+// and the forms for login and registration.
+
 // AuthService: Manages login, logout, token, and user data.
 const AuthService = {
     login: function(email, password, successCallback, errorCallback) {
@@ -42,31 +45,55 @@ const FormHandler = {
             first_name: $("#registerFirstName").val(),
             last_name: $("#registerLastName").val()
         };
-        if (userData.password !== $("#confirmPassword").val()) {
-            alert("Passwords do not match.");
+
+        // --- VALIDATION LOGIC ---
+        if (!userData.username || !userData.email || !userData.password) {
+            toastr.error("Please fill in all required fields: Username, Email, and Password.");
             return;
         }
+        if (userData.email.indexOf('@') === -1) {
+            toastr.error("Please enter a valid email address.");
+            return;
+        }
+        if (userData.password.length < 8) {
+            toastr.warning("Password must be at least 8 characters long.");
+            return;
+        }
+        if (userData.password !== $("#confirmPassword").val()) {
+            toastr.error("Passwords do not match.");
+            return;
+        }
+        
+        // --- API CALL ---
         UserService.register(userData,
             (response) => {
-                alert("Registration successful! Please log in.");
+                toastr.success("Registration successful! Please log in.");
                 window.location.hash = "#login";
             },
             (error) => {
-                alert("Registration failed: " + (error.error || "Unknown error."));
+                toastr.error("Registration failed: " + (error.error || "Unknown error."));
             }
         );
     },
+
     handleLogin: function(e) {
         e.preventDefault();
         const email = $("#loginEmail").val();
         const password = $("#loginPassword").val();
+
+        if (!email || !password) {
+            toastr.error("Please enter both email and password.");
+            return;
+        }
+
         AuthService.login(email, password,
             (response) => {
+                toastr.success("Login successful!");
                 window.location.hash = "#dashboard";
                 UI.updateNavbar();
             },
             (error) => {
-                alert("Login failed: " + (error.error || "Invalid credentials."));
+                toastr.error("Login failed: " + (error.error || "Invalid credentials."));
             }
         );
     }
